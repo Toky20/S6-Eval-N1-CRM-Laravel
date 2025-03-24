@@ -172,6 +172,13 @@
                                 class="bullet-point"><span></span></i> {{ __('Integrations') }}</a>
                 </div>
             @endif
+
+{{-----------------------------------Vendredi----------------------------------------------------------------------------------}}
+
+            {{--Lien de réinitialisation de données--}}
+            <a href="{{ route('resetdata.index')}}" class=" list-group-item" data-parent="#MainMenu"><i
+                class="fa fa-cog sidebar-icon"></i><span id="menu-txt">{{ __('Reset data') }}</span>
+            </a>
         </div>
     </nav>
 
