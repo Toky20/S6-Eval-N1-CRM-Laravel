@@ -12,6 +12,9 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 
+/*Samedi*/
+use App\Services\Invoice\InvoiceCalculator;
+
 class PaymentsController extends Controller
 {
     /**
@@ -53,6 +56,27 @@ class PaymentsController extends Controller
             session()->flash('flash_message_warning', __("Can't add payment on Invoice"));
             return redirect()->route('invoices.show', $invoice->external_id);
         }
+
+        /* Message erreur si montant supérieur */
+        $invoiceCalculator = new InvoiceCalculator($invoice);
+        $amountDue = $invoiceCalculator->getAmountDue()->getBigDecimalAmount();
+
+        $amountToPay = $request->amount;
+
+        if ($amountToPay > $amountDue) {
+            session()->flash('flash_message_warning', 
+            __("Le montant à payer dépasse le montant à payer"));
+            return redirect()->route('invoices.show', $invoice->external_id);
+        }
+        /* Fin message erreur si montant supérieur */
+
+        /* Message erreur si négatif */
+        if ($amountToPay < 0) {
+            session()->flash('flash_message_warning', 
+            __("Le montant à payer ne peut pas etre négatif"));
+            return redirect()->route('invoices.show', $invoice->external_id);
+        }
+        /* Fin message erreur si négatif */
 
         $payment = Payment::create([
             'external_id' => Uuid::uuid4()->toString(),
