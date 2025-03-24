@@ -22,6 +22,10 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('projects', ['uses' => 'ProjectController@index']); 
         Route::get('tasks', ['uses' => 'TaskController@index']);
 
+        Route::get('offers', ['uses' => 'OfferController@index']);
+        Route::get('offers/stat', ['uses' => 'OfferController@getOffersStatistics']);
+        Route::get('offers/stat/clients', ['uses' => 'OfferController@getClientOffersStatistics']);
+        Route::get('offers/stat/users', ['uses' => 'OfferController@getUserOffersStatistics']);
 
     
         /**
