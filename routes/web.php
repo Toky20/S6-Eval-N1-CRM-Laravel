@@ -218,6 +218,18 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     /**
+     * Vendredi
+     */
+
+    /**
+     * Reinitialisation de base
+     */
+    Route::group(['prefix' => 'resetdata'], function () {
+        Route::get('/', 'ResetDataController@index')->name('resetdata.index');
+        Route::get('/reset', 'ResetDataController@reset')->name('resetdata.reset'); 
+    });
+
+    /**
      * Absence
      */
     Route::group(['prefix' => 'absences'], function () {
@@ -227,6 +239,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/', 'AbsenceController@store')->name('absence.store');
         Route::delete('/{absence}', 'AbsenceController@destroy')->name('absence.destroy');
     });
+
+    
+    
 });
 
 Route::group(['middleware' => ['auth']], function () {

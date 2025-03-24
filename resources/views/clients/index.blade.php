@@ -60,7 +60,20 @@
                 { data: 'delete', name: 'delete', orderable: false, searchable: false, class:'fit-action-delete-th table-actions'},
                 @endif
 
-            ]
+            ],
+            createdRow: function(row, data, dataIndex) {
+                // Par exemple, modifions la couleur de fond en fonction de la valeur du 'vat'
+                if (data.vat === '27009359') {
+                    $(row).css('background-color', '#ffcccc');  // Changez la couleur en rouge clair pour ce 'vat'
+                } else if (data.vat === '987654321') {
+                    $(row).css('background-color', '#ccffcc');  // Changez la couleur en vert clair pour ce 'vat'
+                } else {
+                    $(row).css('background-color', '#ffffff');  // Valeur par défaut (blanc)
+                }
+
+                // Vous pouvez également appliquer des classes CSS spécifiques
+                // $(row).addClass('custom-class');
+            }
         });
 
     });

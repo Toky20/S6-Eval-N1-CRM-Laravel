@@ -42,6 +42,11 @@ class InvoiceCalculator
             $price += $invoiceLine->quantity * $invoiceLine->price;
         }
 
+        // Application de la remise si elle existe
+        if ($this->invoice->tauxremise) {
+            $price *= (1 - ($this->invoice->tauxremise / 100));
+        }
+
         return new Money($price);
     }
 
@@ -53,8 +58,15 @@ class InvoiceCalculator
         foreach ($invoiceLines as $invoiceLine) {
             $price += $invoiceLine->quantity * $invoiceLine->price;
         }
+
+        // Application de la remise si elle existe
+        if ($this->invoice->tauxremise) {
+            $price *= (1 - ($this->invoice->tauxremise / 100));
+        }
+
         return new Money($price / $this->tax->multipleVatRate());
     }
+
 
     public function getAmountDue()
     {
@@ -71,3 +83,8 @@ class InvoiceCalculator
         return $this->tax;
     }
 }
+
+
+
+
+

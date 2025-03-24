@@ -1,0 +1,37 @@
+composer require laravel/passport:v7.5.1 --with-all-dependencies
+php artisan make:middleware Cors
+
+php artisan make:controller Api/AuthController
+
+php artisan passport:install
+php artisan passport:keys
+composer require fruitcake/laravel-cors
+php artisan vendor:publish --tag="cors"
+composer update lcobucci/jwt --with-dependencies
+php artisan passport:keys --force
+
+php artisan config:clear
+php artisan cache:clear
+php artisan serve --port=8000
+
+php artisan make:migration add_discount_rate_to_invoices_table
+
+curl -X POST http://127.0.0.1:8000/api/login -H "Content-Type: application/json" -d '{"email":"admin@admin.com","password":"admin123"}'
+curl -X POST http://127.0.0.1:8000/api/login -H "Content-Type: application/json" -d "{\"email\":\"admin@admin.com\",\"password\":\"admin123\"}"
+
+offers winned and lost
+offres par client
+offres par user
+
+invoice date créé
+
+paiement status
+paiement source status
+paiement jour
+paiement client
+
+offers closed
+
+order by(depassant les izao no atao tel couleur)
+
+lead - offres -invoices -payements
