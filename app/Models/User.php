@@ -13,10 +13,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Cashier\Billable;
 use Carbon\Carbon;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
     use Notifiable, EntrustUserTrait,  SoftDeletes, Billable;
+
+/* Modif API */    
+    use HasApiTokens; // Ajouter HasApiTokens
+/* Modif API */    
 
     public function restore()
     {
@@ -194,3 +199,8 @@ class User extends Authenticatable
         return collect(['keys' => $keys, 'counts' => $counts]);
     }
 }
+
+
+
+
+
