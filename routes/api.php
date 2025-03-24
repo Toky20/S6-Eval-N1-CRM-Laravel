@@ -19,7 +19,9 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('users', ['uses' => 'UserController@index']);
         Route::get('clients', ['uses' => 'ClientController@index']);
-        Route::get('projects', ['uses' => 'ProjectController@index']);
+        Route::get('projects', ['uses' => 'ProjectController@index']); 
+        Route::get('tasks', ['uses' => 'TaskController@index']);
+
 
     
         /**
