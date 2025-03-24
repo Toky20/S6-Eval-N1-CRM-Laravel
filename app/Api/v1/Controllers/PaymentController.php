@@ -61,13 +61,15 @@ class PaymentController extends ApiController
     public function show($externalId)
     {
         $payment = Payment::where('external_id', $externalId)
-            ->with('invoice')
+            //->with('invoice')
             ->firstOrFail();
 
-        return response()->json([
+        /* return response()->json([
             'payment' => $payment,
             'invoice' => $payment->invoice,
-        ]);
+        ]); */
+        return response()->json($payment
+        );
     }
 
     /**
