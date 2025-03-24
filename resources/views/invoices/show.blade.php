@@ -170,6 +170,9 @@
                                         <button type="button" id="update-payment" class="btn btn-md btn-brand btn-full-width closebtn"
                                                 <?php $titleText =  !$invoice->isSent() ? __("Can't pay an invoice with status draft. Send invoice first or force a new status") : "" ?> title="{{$titleText}}"
                                                 {{ !$invoice->isSent() ? 'disabled ' : "" }}
+
+                                                {{ $amountDue->getBigDecimalAmount()==0 ? 'disabled ' : "" }}
+                                                
                                                 data-toggle="modal" data-target="#update-payment-modal">@lang('Register payment')</button>
                             @endif
                         </div>
