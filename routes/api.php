@@ -27,6 +27,16 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('offers/stat/clients', ['uses' => 'OfferController@getClientOffersStatistics']);
         Route::get('offers/stat/users', ['uses' => 'OfferController@getUserOffersStatistics']);
 
+        Route::get('settings/remise', ['uses' => 'SettingController@getDiscountRate']);
+        Route::put('settings/remise', ['uses' => 'SettingController@updateDiscountRate']);
+
+        Route::get('invoices', ['uses' => 'InvoiceController@index']); 
+        Route::get('invoices/stat/product', ['uses' => 'InvoiceController@getProductQty']); 
+        Route::get('invoices/stat/status', ['uses' => 'InvoiceController@getInvoiceStatusDistribution']); 
+
+        Route::get('invoices/remise/apply/{external_id}', ['uses' => 'InvoiceController@applyDiscount']); 
+        Route::get('invoices/remise/remove/{external_id}', ['uses' => 'InvoiceController@removeDiscount']); 
+
         Route::get('payments/clients', ['uses' => 'PaymentController@getTotalPaymentsByClient']);
         Route::get('payments/clients/{clientId}', ['uses' => 'PaymentController@getPaymentsByClient']);
 

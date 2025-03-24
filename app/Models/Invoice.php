@@ -35,6 +35,7 @@ class Invoice extends Model
         'source_type',
         'external_id',
         'offer_id',
+        'tauxremise'
     ];
 
     protected $dates = [
@@ -160,9 +161,33 @@ class Invoice extends Model
         return $query->where('status', '!=', InvoiceStatus::paid()->getStatus());
     }
 
-    public function getTotalPriceAttribute()
+    /* public function getTotalPriceAttribute()
     {
         $invoiceCalculator = new InvoiceCalculator($this);
         return $invoiceCalculator->getTotalPrice();
+    } */
+
+    protected $appends = ['total_price'];
+
+    protected function getTotalPriceAttribute()
+    {
+        $calculator = new InvoiceCalculator($this);
+        return $calculator->getTotalPrice()->getBigDecimalAmount();
+    }
+
+    /*  */
+    public function scopeGetStatusDistribution()
+    {
+        $totalInvoices = self::count();
+        
+        return self::selectRaw("
+            status,
+            COUNT(*) as total,
+            ROUND((COUNT(*) / {$totalInvoices}) * 100, 2) as percentage,
+            SUM(CASE WHEN status = '" . InvoiceStatus::paid()->getStatus() . "' THEN 1 ELSE 0 END) as paid_count,
+            ROUND((SUM(CASE WHEN status = '" . InvoiceStatus::paid()->getStatus() . "' THEN 1 ELSE 0 END) / {$totalInvoices}) * 100, 2) as paid_percentage
+        ")
+        ->groupBy('status')
+        ->orderBy('total', 'desc');
     }
 }
