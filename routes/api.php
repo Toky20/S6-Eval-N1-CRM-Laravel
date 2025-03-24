@@ -27,6 +27,17 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('offers/stat/clients', ['uses' => 'OfferController@getClientOffersStatistics']);
         Route::get('offers/stat/users', ['uses' => 'OfferController@getUserOffersStatistics']);
 
+        Route::get('payments/clients', ['uses' => 'PaymentController@getTotalPaymentsByClient']);
+        Route::get('payments/clients/{clientId}', ['uses' => 'PaymentController@getPaymentsByClient']);
+
+        Route::get('payments/days', ['uses' => 'PaymentController@getTotalPaymentsByDay']);
+        Route::get('payments/days/{date}', ['uses' => 'PaymentController@getPaymentsByDay']);
+
+        Route::get('payments/sources', ['uses' => 'PaymentController@getTotalByPaymentSource']);
+        Route::get('payments/sources/{paymentSource}', ['uses' => 'PaymentController@getPaymentsBySource']);
+        Route::get('payments/{external_id}', ['uses' => 'PaymentController@show']);
+        Route::put('payments/{external_id}', ['uses' => 'PaymentController@update']);
+
     
         /**
          * Users
