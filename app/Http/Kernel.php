@@ -15,7 +15,10 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\Cors::class,
+        \Fruitcake\Cors\HandleCors::class, // Doit être en haut
     ];
+
 
     /**
      * The application's route middleware groups.
@@ -72,3 +75,4 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }
+
