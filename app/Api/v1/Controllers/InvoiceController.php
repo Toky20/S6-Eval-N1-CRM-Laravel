@@ -45,6 +45,7 @@ class InvoiceController extends ApiController
                     'status' => $invoice->status,
                     'invoice_number' => $invoice->invoice_number,
                     'total_price' => $invoice->total_price,
+                    'tauxremise' => $invoice->tauxremise,
                     'invoice_lines_count' => $invoice->invoice_lines_count,
                     'invoice_lines' => $invoice->invoice_lines,
                     'created_at' => $invoice->created_at,
