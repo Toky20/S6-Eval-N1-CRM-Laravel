@@ -35,3 +35,10 @@ offers closed
 order by(depassant les izao no atao tel couleur)
 
 lead - offres -invoices -payements
+
+composer install
+php artisan migrate --seed
+php artisan key:generate
+npm install 
+npm run dev
+php artisan migrate:fresh --seed && php artisan db:seed --class=DummyDatabaseSeeder
