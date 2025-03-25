@@ -217,6 +217,19 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/{appointment}', 'AppointmentsController@destroy')->name('appointments.destroy');
     });
 
+    
+
+    /**
+     * Absence
+     */
+    Route::group(['prefix' => 'absences'], function () {
+        Route::get('/data', 'AbsenceController@indexData')->name('absence.data');
+        Route::get('/', 'AbsenceController@index')->name('absence.index');
+        Route::get('/create', 'AbsenceController@create')->name('absence.create');
+        Route::post('/', 'AbsenceController@store')->name('absence.store');
+        Route::delete('/{absence}', 'AbsenceController@destroy')->name('absence.destroy');
+    });
+
     /**
      * Vendredi
      */
@@ -230,15 +243,11 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     /**
-     * Absence
+     * Import
      */
-    Route::group(['prefix' => 'absences'], function () {
-        Route::get('/data', 'AbsenceController@indexData')->name('absence.data');
-        Route::get('/', 'AbsenceController@index')->name('absence.index');
-        Route::get('/create', 'AbsenceController@create')->name('absence.create');
-        Route::post('/', 'AbsenceController@store')->name('absence.store');
-        Route::delete('/{absence}', 'AbsenceController@destroy')->name('absence.destroy');
-    });
+
+    Route::get('/import', 'ImportController@showForm' )->name('import.form');
+    Route::post('/import', 'ImportController@processImport')->name('import.process');
 
     
     
