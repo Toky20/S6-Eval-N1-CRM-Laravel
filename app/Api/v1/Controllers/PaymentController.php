@@ -7,6 +7,7 @@ use App\Api\v1\Controllers\ApiController;
 use Illuminate\Http\Request;
 use App\Services\Invoice\InvoiceCalculator;
 use App\Services\Invoice\GenerateInvoiceStatus;
+use App\Models\Integration;
 
 class PaymentController extends ApiController
 {
@@ -219,6 +220,54 @@ class PaymentController extends ApiController
             'total_amount' => $payments->sum('amount'),
             'daily_total' => Payment::whereDate('payment_date', $date)->sum('amount'),
         ]);
+    }
+
+
+
+    /**
+     * Supprimer un paiement spécifique
+     *
+     * @param string $externalId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($externalId)
+    {
+        // Vérification des permissions
+        if (!auth()->user()->can('payment-delete')) {
+            return response()->json([
+                'error' => __('Vous n\'avez pas la permission de supprimer ce paiement')
+            ], 403);
+        }
+
+        try {
+            // Recherche du paiement par external_id
+            $payment = Payment::where('external_id', $externalId)->firstOrFail();
+
+            // Suppression via l'API de facturation si configurée
+            $api = Integration::initBillingIntegration();
+            if ($api) {
+                $api->deletePayment($payment);
+            }
+
+            // Suppression du paiement
+            $payment->delete();
+
+            return response()->json([
+                'message' => __('Paiement supprimé avec succès'),
+                'status' => 'success'
+            ], 200);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'error' => __('Paiement non trouvé'),
+                'details' => 'External ID invalide'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => __('Erreur lors de la suppression du paiement'),
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 }
 
