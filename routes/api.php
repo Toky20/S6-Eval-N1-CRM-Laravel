@@ -12,8 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-/* ->withoutMiddleware(['auth:api']) */
-Route::post('/login', 'App\Api\v1\Controllers\Auth\AuthController@login');
+
+Route::post('/login', 'App\Api\v1\Controllers\Auth\AuthController@login')->withoutMiddleware(['auth:api']);
 
 Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
@@ -47,8 +47,8 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('payments/sources/{paymentSource}', ['uses' => 'PaymentController@getPaymentsBySource']);
         Route::get('payments/{external_id}', ['uses' => 'PaymentController@show']);
         Route::put('payments/{external_id}', ['uses' => 'PaymentController@update']);
+        Route::get('payments/delete/{external_id}', ['uses' => 'PaymentController@destroy']);
 
-    
         /**
          * Users
          */

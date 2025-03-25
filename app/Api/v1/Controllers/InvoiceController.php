@@ -49,7 +49,8 @@ class InvoiceController extends ApiController
                     'invoice_lines_count' => $invoice->invoice_lines_count,
                     'invoice_lines' => $invoice->invoice_lines,
                     'created_at' => $invoice->created_at,
-                    'updated_at' => $invoice->updated_at
+                    'updated_at' => $invoice->updated_at,
+                    'client_name' => $invoice->client->company_name
                 ];
             }),
             'total' => $invoices->count()
