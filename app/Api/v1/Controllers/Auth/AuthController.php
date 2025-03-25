@@ -8,22 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    /* public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            //
-            $user = Auth::user();
-            $token = $user->createToken('SpringBootAccess')->accessToken;
-            return response()->json(['token' => $token]);
-        }
-
-        //dd($credentials);
-
-        return response()->json(Auth::attempt($credentials));
-    }  */
-
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -41,17 +25,9 @@ class AuthController extends Controller
         ], 401);
     }
 
-    /* public function login(Request $request)
+    public function logout(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-
-        // Utiliser le guard 'api' explicitement
-        if (Auth::guard('api')->attempt($credentials)) {
-            $user = Auth::guard('api')->user();
-            $token = $user->createToken('SpringBoot')->accessToken;
-            return response()->json(['token' => $token]);
-        }
-
-        return response()->json(['error' => 'Email ou mot de passe incorrect'], 401);
-    } */
+        $request->user()->token()->revoke();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
 }
