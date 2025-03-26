@@ -27,6 +27,8 @@ use App\Models\Integration;
 use App\Models\Industry;
 use Ramsey\Uuid\Uuid;
 use App\Models\Contact;
+use DB;
+use Illuminate\Support\Facades\Response;
 
 class ClientsController extends Controller
 {
@@ -187,6 +189,60 @@ class ClientsController extends Controller
             })
             ->rawColumns(['invoice_number'])
             ->make(true);
+    }
+
+    public function exportClient($external_id)
+    {
+        $data = DB::table('clients')
+                     ->select(DB::raw('
+                     clients.company_name,
+                    leads.title,
+                    leads.title,
+                    invoice_lines.title,
+                    invoice_lines.price,
+                    invoice_lines.quantity'))
+                    ->where('clients.external_id', '=', $external_id)
+                    ->join('projects', 'projects.client_id', '=', 'clients.id')
+                    ->join('invoices', 'invoices.client_id', '=', 'clients.id')
+                    ->join('leads', 'leads.id', '=', 'invoices.source_id')
+                    ->join('invoice_lines', 'invoice_lines.invoice_id', '=', 'invoices.id')
+                    ->get()->toArray();
+
+                    dd($data);
+
+        // Write data to CSV
+       /*  $csvFileName = 'client.csv';
+        $csvFile = fopen($csvFileName, 'w'); */
+        //$headers = array_keys((array) $data[0]); // Get the column headers from the first row
+        /* fputcsv($csvFile, $headers); */
+//(array)
+        /* foreach ($data as $row) {
+            fputcsv($csvFile,  $row);
+        } */
+
+        //$handle = fopen('export.csv', 'w');
+        $handle =fopen('php://output', 'w');
+
+        $dataArr = [$data];
+
+        
+ 
+        
+        foreach ($data as $fields) {
+            fputcsv($handle,get_object_vars($fields));
+            fwrite($handle, "\n\n");
+        }
+        //fputcsv($handle, $data);
+
+        fclose($handle);
+
+        //dd($csvFile);
+
+        // Download the CSV file
+        //return Response::download(public_path($handle))->deleteFileAfterSend(true);
+
+        // :: send download headers here ::
+
     }
 
     /**
