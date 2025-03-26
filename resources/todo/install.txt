@@ -68,3 +68,20 @@ CREATE TRIGGER before_insert_products_date_create BEFORE INSERT ON products FOR 
 CREATE TRIGGER before_insert_invoices_uuid BEFORE INSERT ON invoices FOR EACH ROW SET NEW.external_id = UUID();
 CREATE TRIGGER before_insert_invoices_date_create BEFORE INSERT ON invoices FOR EACH ROW SET NEW.created_at = now();
 
+
+////////////////////////////
+
+
+Alea 
+Principe : ao @ ilay app existante micopier/dupliquer données,
+copier clients 
+import misy zanany(offers et invoices)
+
+dupliquer clients(projet et invoices)
+
+forme: isakin'ny écran, bouton exporter
+exporter ny données(dans un fichier) depuis l'ext
+
+ilay import avy ao @ ilay newapp
+
+
