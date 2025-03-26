@@ -40,6 +40,7 @@ class DataReset extends Model
             DB::statement('ALTER TABLE invoices AUTO_INCREMENT = 1');
             DB::statement('ALTER TABLE contacts AUTO_INCREMENT = 1');
             DB::statement('ALTER TABLE projects AUTO_INCREMENT = 1');
+            DB::statement('ALTER TABLE leads AUTO_INCREMENT = 1');
             DB::statement('ALTER TABLE tasks AUTO_INCREMENT = 1');
             DB::statement('ALTER TABLE appointments AUTO_INCREMENT = 1');
             DB::statement('ALTER TABLE clients AUTO_INCREMENT = 1');

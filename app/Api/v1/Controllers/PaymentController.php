@@ -9,6 +9,7 @@ use App\Services\Invoice\InvoiceCalculator;
 use App\Services\Invoice\GenerateInvoiceStatus;
 use App\Models\Integration;
 
+
 class PaymentController extends ApiController
 {
     /**
@@ -251,6 +252,8 @@ class PaymentController extends ApiController
 
             // Suppression du paiement
             $payment->delete();
+
+            app(GenerateInvoiceStatus::class, ['invoice' => $payment->invoice])->createStatus();
 
             return response()->json([
                 'message' => __('Paiement supprimé avec succès'),

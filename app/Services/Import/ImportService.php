@@ -277,9 +277,6 @@ class ImportService
         where tli.type='invoice' 
         and il.invoice_id is null ;");
 
-        /* DB::statement("update offers set source_type='App\\Models\\Lead';");
-        DB::statement("update invoices set source_type='App\\Models\\Lead';"); */
-
         Offer::query()->update(['source_type' => Lead::class]);
         Invoice::query()->update(['source_type' => Lead::class]);
 

@@ -29,7 +29,8 @@ class Product extends Model
 
     public function scopeGetTotalQuantitiesByProductWithPercentages()
     {
-        $totalQuantity = InvoiceLine::sum('quantity');
+        //$totalQuantity = InvoiceLine::sum('quantity');
+        $totalQuantity = InvoiceLine::whereNotNull('invoice_id')->sum('quantity');
     
         return InvoiceLine::selectRaw("
             products.id,
@@ -38,7 +39,7 @@ class Product extends Model
             ROUND((COALESCE(SUM(invoice_lines.quantity), 0) / {$totalQuantity}) * 100, 2) as percentage_of_total
         ")
         ->leftJoin('products', 'invoice_lines.product_id', '=', 'products.id')
-        //->whereNotNull('invoice_lines.product_id')
+        ->whereNotNull('invoice_lines.invoice_id')
         ->groupBy('products.id', 'products.name')
         ->orderBy('total_quantity', 'desc');
     }
