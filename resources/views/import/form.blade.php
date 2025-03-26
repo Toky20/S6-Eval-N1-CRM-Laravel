@@ -1,5 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
+@section('heading')
+    {{ __('Import Data')}}
+@stop
 @section('content')
 <div class="container">
     <h1>Importer des données</h1>
@@ -73,10 +76,21 @@
     </div>
 @endif --}}
 
-@if(session('success'))
+{{-- @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
+@endif --}}
+{{-- Messages et statistiques --}}
+@if(session('success'))
+<div class="alert alert-success">
+    <h4>{{ session('success')['message'] }}</h4>
+    <ul class="mb-0">
+        <li>Projets importés : {{ session('success')['counts']['projects_count'] }}</li>
+        <li>Tâches importées : {{ session('success')['counts']['tasks_count'] }}</li>
+        <li>Transactions importées : {{ session('success')['counts']['leads_count'] }}</li>
+    </ul>
+</div>
 @endif
 
 @if ($errors->any())

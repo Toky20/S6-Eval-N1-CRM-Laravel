@@ -42,3 +42,29 @@ php artisan key:generate
 npm install 
 npm run dev
 php artisan migrate:fresh --seed && php artisan db:seed --class=DummyDatabaseSeeder
+
+
+CREATE TRIGGER before_insert_clients_uuid BEFORE INSERT ON clients FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_clients_date_create BEFORE INSERT ON clients FOR EACH ROW SET NEW.created_at = now();
+CREATE TRIGGER before_insert_contacts_uuid BEFORE INSERT ON contacts FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_contacts_date_create BEFORE INSERT ON contacts FOR EACH ROW SET NEW.created_at = now();
+CREATE TRIGGER before_insert_projects_uuid BEFORE INSERT ON projects FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_projects_date_create BEFORE INSERT ON projects FOR EACH ROW SET NEW.created_at = now();
+CREATE TRIGGER before_insert_tasks_uuid BEFORE INSERT ON tasks FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_tasks_date_create BEFORE INSERT ON tasks FOR EACH ROW SET NEW.created_at = now();
+CREATE TRIGGER before_insert_leads_uuid BEFORE INSERT ON leads FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_leads_date_create BEFORE INSERT ON leads FOR EACH ROW SET NEW.created_at = now();
+CREATE TRIGGER before_insert_offers_uuid BEFORE INSERT ON offers FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_offers_date_create BEFORE INSERT ON offers FOR EACH ROW SET NEW.created_at = now();
+
+CREATE TRIGGER before_insert_invoice_lines_uuid BEFORE INSERT ON invoice_lines FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_invoice_lines_date_create BEFORE INSERT ON invoice_lines FOR EACH ROW SET NEW.created_at = now();
+
+CREATE TRIGGER before_insert_products_uuid BEFORE INSERT ON products FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_products_date_create BEFORE INSERT ON products FOR EACH ROW SET NEW.created_at = now();
+
+
+
+CREATE TRIGGER before_insert_invoices_uuid BEFORE INSERT ON invoices FOR EACH ROW SET NEW.external_id = UUID();
+CREATE TRIGGER before_insert_invoices_date_create BEFORE INSERT ON invoices FOR EACH ROW SET NEW.created_at = now();
+

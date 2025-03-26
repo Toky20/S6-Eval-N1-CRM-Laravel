@@ -23,9 +23,10 @@ class DataReset extends Model
             DB::table('invoice_lines')->delete();
             DB::table('offers')->delete();
             DB::table('invoices')->delete();
-            //DB::table('contacts')->delete();
-            //DB::table('clients')->delete();
+            DB::table('contacts')->delete();
+            DB::table('clients')->delete();
             DB::table('projects')->delete();
+            DB::table('leads')->delete();
             DB::table('tasks')->delete();
             DB::table('appointments')->delete();
             DB::table('products')->delete();

@@ -179,6 +179,10 @@
             <a href="{{ route('resetdata.index')}}" class=" list-group-item" data-parent="#MainMenu"><i
                 class="fa fa-cog sidebar-icon"></i><span id="menu-txt">{{ __('Reset data') }}</span>
             </a>
+
+            <a href="{{ route('import.form')}}" class=" list-group-item" data-parent="#MainMenu"><i
+                class="fa fa-cog sidebar-icon"></i><span id="menu-txt">{{ __('Import data') }}</span>
+            </a>
         </div>
     </nav>
 

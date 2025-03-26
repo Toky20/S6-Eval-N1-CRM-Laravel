@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\Import\ImportService;
+use DB;
 
 class ImportController extends Controller
 {
@@ -51,7 +52,19 @@ class ImportController extends Controller
         $this->importService->insertData($tasks['data'], 'temp_tasks');
         $this->importService->insertData($leads['data'], 'temp_leads_invoices');
 
+        $this->importService->importFromTempTables();
+
+        /* return redirect()->back()
+                       ->with('success', 'Les fichiers ont été importés avec succès !'); */
+        // Ajout des statistiques et du message de succès
         return redirect()->back()
-                       ->with('success', 'Les fichiers ont été importés avec succès !');
+        ->with('success', [
+            'message' => 'Les fichiers ont été importés avec succès !',
+            'counts' => [
+                'projects_count' => DB::table('temp_projects')->count(),
+                'tasks_count' => DB::table('temp_tasks')->count(),
+                'leads_count' => DB::table('temp_leads_invoices')->count()
+            ]
+        ]);               
     }
 }
