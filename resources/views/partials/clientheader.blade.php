@@ -70,6 +70,14 @@
                         {{$client->company_type}}</p>
                 @endif
             </div>
+
+            <!-- Bouton export -->
+            <div class="row">
+                <a href="{{ route('client.export', $client->external_id) }}" class="btn btn-primary mb-3">
+                    <i class="fas fa-file-export"></i> Dupliquer le client
+                </a>
+            </div>
+            <!-- Bouton export -->
         </div>
     </div>
 </div>
