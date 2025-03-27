@@ -191,14 +191,13 @@ class ClientsController extends Controller
             ->make(true);
     }
 
-    public function exportClient($external_id)
+   /*  public function exportClient($external_id)
     {
         $data = DB::table('clients')
                      ->select(DB::raw('
-                     clients.company_name,
-                    leads.title,
-                    leads.title,
-                    invoice_lines.title,
+                     clients.company_name as client,
+                    leads.title as lead,
+                    invoice_lines.title as product,
                     invoice_lines.price,
                     invoice_lines.quantity'))
                     ->where('clients.external_id', '=', $external_id)
@@ -208,41 +207,74 @@ class ClientsController extends Controller
                     ->join('invoice_lines', 'invoice_lines.invoice_id', '=', 'invoices.id')
                     ->get()->toArray();
 
-                    dd($data);
-
-        // Write data to CSV
-       /*  $csvFileName = 'client.csv';
-        $csvFile = fopen($csvFileName, 'w'); */
-        //$headers = array_keys((array) $data[0]); // Get the column headers from the first row
-        /* fputcsv($csvFile, $headers); */
-//(array)
-        /* foreach ($data as $row) {
-            fputcsv($csvFile,  $row);
-        } */
-
-        //$handle = fopen('export.csv', 'w');
         $handle =fopen('php://output', 'w');
 
-        $dataArr = [$data];
-
-        
- 
-        
         foreach ($data as $fields) {
             fputcsv($handle,get_object_vars($fields));
-            fwrite($handle, "\n\n");
         }
-        //fputcsv($handle, $data);
-
         fclose($handle);
+    } */
 
-        //dd($csvFile);
+    public function exportClient($external_id)
+    {
+        $data = DB::table('clients')
+            ->select([
+                DB::raw("CONCAT(clients.company_name, 'Copy') as client"),
+                DB::raw("CONCAT(projects.title, 'Copy') as project"),
+                DB::raw("CONCAT(leads.title, 'Copy') as lead"),
+                "invoice_lines.title as product",
+                "invoice_lines.price",
+                "invoice_lines.quantity"
+            ])
+            ->where('clients.external_id', $external_id)
+            ->join('projects', 'projects.client_id', 'clients.id')
+            ->join('invoices', 'invoices.client_id', 'clients.id')
+            ->join('leads', 'leads.id', 'invoices.source_id')
+            ->join('invoice_lines', 'invoice_lines.invoice_id', 'invoices.id')
+            ->get();
 
-        // Download the CSV file
-        //return Response::download(public_path($handle))->deleteFileAfterSend(true);
+        $fileName = 'client_export_' . $external_id . '.csv';
 
-        // :: send download headers here ::
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET',
+            'Access-Control-Expose-Headers' => 'Content-Disposition'
+        ];
 
+        $callback = function() use ($data) {
+            $handle = fopen('php://output', 'w');
+            
+            // Ajout du BOM pour UTF-8
+            fwrite($handle, "\xEF\xBB\xBF");
+            
+            // En-têtes
+            fputcsv($handle, [
+                'client',
+                'project',
+                'lead',
+                'produit',
+                'prix',
+                'quantite'
+            ], ',');
+
+            // Données
+            foreach ($data as $row) {
+                fputcsv($handle, [
+                    $row->client,
+                    $row->project,
+                    $row->lead,
+                    $row->product,
+                    $row->price,
+                    $row->quantity
+                ], ',');
+            }
+            
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**

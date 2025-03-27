@@ -50,6 +50,8 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::put('payments/{external_id}', ['uses' => 'PaymentController@update']);
         Route::get('payments/delete/{external_id}', ['uses' => 'PaymentController@destroy']);
 
+        Route::post('/import-csv', ['uses' => 'ImportController@index']);
+
         /**
          * Users
          */
