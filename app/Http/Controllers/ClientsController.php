@@ -27,6 +27,8 @@ use App\Models\Integration;
 use App\Models\Industry;
 use Ramsey\Uuid\Uuid;
 use App\Models\Contact;
+use DB;
+use Illuminate\Support\Facades\Response;
 
 class ClientsController extends Controller
 {
@@ -187,6 +189,92 @@ class ClientsController extends Controller
             })
             ->rawColumns(['invoice_number'])
             ->make(true);
+    }
+
+   /*  public function exportClient($external_id)
+    {
+        $data = DB::table('clients')
+                     ->select(DB::raw('
+                     clients.company_name as client,
+                    leads.title as lead,
+                    invoice_lines.title as product,
+                    invoice_lines.price,
+                    invoice_lines.quantity'))
+                    ->where('clients.external_id', '=', $external_id)
+                    ->join('projects', 'projects.client_id', '=', 'clients.id')
+                    ->join('invoices', 'invoices.client_id', '=', 'clients.id')
+                    ->join('leads', 'leads.id', '=', 'invoices.source_id')
+                    ->join('invoice_lines', 'invoice_lines.invoice_id', '=', 'invoices.id')
+                    ->get()->toArray();
+
+        $handle =fopen('php://output', 'w');
+
+        foreach ($data as $fields) {
+            fputcsv($handle,get_object_vars($fields));
+        }
+        fclose($handle);
+    } */
+
+    public function exportClient($external_id)
+    {
+        $data = DB::table('clients')
+            ->select([
+                DB::raw("CONCAT(clients.company_name, 'Copy') as client"),
+                DB::raw("CONCAT(projects.title, 'Copy') as project"),
+                DB::raw("CONCAT(leads.title, 'Copy') as lead"),
+                "invoice_lines.title as product",
+                "invoice_lines.price",
+                "invoice_lines.quantity"
+            ])
+            ->where('clients.external_id', $external_id)
+            ->join('projects', 'projects.client_id', 'clients.id')
+            ->join('invoices', 'invoices.client_id', 'clients.id')
+            ->join('leads', 'leads.id', 'invoices.source_id')
+            ->join('invoice_lines', 'invoice_lines.invoice_id', 'invoices.id')
+            ->get();
+
+        $fileName = 'client_export_' . $external_id . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET',
+            'Access-Control-Expose-Headers' => 'Content-Disposition'
+        ];
+
+        $callback = function() use ($data) {
+            $handle = fopen('php://output', 'w');
+            
+            // Ajout du BOM pour UTF-8
+            fwrite($handle, "\xEF\xBB\xBF");
+            
+            // En-têtes
+            fputcsv($handle, [
+                'client',
+                'project',
+                'lead',
+                'produit',
+                'prix',
+                'quantite'
+            ], ',');
+
+            // Données
+            foreach ($data as $row) {
+                fputcsv($handle, [
+                    $row->client,
+                    $row->project,
+                    $row->lead,
+                    $row->product,
+                    $row->price,
+                    $row->quantity
+                ], ',');
+            }
+            
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**

@@ -212,7 +212,7 @@ class ImportService
         and o.source_id is null and o.client_id is null ;");
 
         DB::statement("insert into products (name,number,default_type,archived,price,created_at,updated_at)
-        select distinct tli.produit,1,'pieces',0,0,CURDATE(),CURDATE() 
+        select distinct tli.produit,1,'pieces',0,1,CURDATE(),CURDATE() 
         from temp_leads_invoices tli 
         left join products p on p.name=tli.produit 
         where p.name is null;");
